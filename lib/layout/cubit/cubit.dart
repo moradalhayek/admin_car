@@ -83,7 +83,7 @@ void changePeOrFu()
     List<XFile> xfilePick = pickedFile;
 
     if (xfilePick.isNotEmpty) {
-      for (var i = 0; i < xfilePick.length; i++) {
+      for (int i = 0; i < xfilePick.length; i++) {
         selectedImages.add(File(xfilePick[i].path));
       }
       emit(MultiImagePickedSuccessState());
