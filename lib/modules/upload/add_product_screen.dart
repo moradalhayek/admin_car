@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:admincar/layout/cubit/cubit.dart';
 import 'package:admincar/layout/cubit/states.dart';
 import 'package:admincar/shared/componants/componants.dart';
 import 'package:admincar/shared/styles/icon_brokin.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
 class AddProductScreen extends StatelessWidget {
   AddProductScreen({super.key});
+    
 
   var speedController = TextEditingController();
   var doorController = TextEditingController();
@@ -41,36 +46,62 @@ class AddProductScreen extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    SizedBox(
-                      height: 150,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) => InkWell(
-                          onTap: () {},
-                          onLongPress: () {},
-                          child: Container(
+                    defaultButton(
+                      width: 120,
+                      background: Colors.blueAccent,
+                      isUpperCase: false,
+                      function: () {
+                        cubit.getMultiImages();
+                      },
+                      text: 'Add Images',
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    if (cubit.selectedImages.isNotEmpty)
+                      SizedBox(
+                        height: 150,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) =>
+                              buildImageItem(context, index),
+                          separatorBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Container(height: 1, color: Colors.grey),
+                          ),
+                          itemCount: cubit.selectedImages.length,
+                        ),
+                      ),
+                    if (cubit.selectedImages.isEmpty)
+                      SizedBox(
+                        height: 150,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) => Container(
                             height: 150,
                             width: 150,
                             clipBehavior: Clip.antiAlias,
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.amber.shade100),
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.amber.shade100,
+                            ),
                             child: const Icon(
                               IconBroken.Image_2,
-                              size: 40,
+                              size: 50,
                               color: Colors.black45,
                             ),
                           ),
+                          separatorBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Container(height: 1, color: Colors.grey),
+                          ),
+                          itemCount: 5,
                         ),
-                        separatorBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Container(height: 1, color: Colors.grey),
-                        ),
-                        itemCount: 10,
                       ),
-                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -361,7 +392,10 @@ class AddProductScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         defaultButton(
-                          function: () {},
+                          function: () {
+                         
+                
+                          },
                           text: 'Upload to new',
                           isUpperCase: false,
                           width: 150,
@@ -388,6 +422,31 @@ class AddProductScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget buildImageItem(context, index) {
+    var cubit = MainCubit.get(context);
+    return InkWell(
+      onTap: () {
+        // cubit.getMultiImages();
+      },
+      onLongPress: () {
+        cubit.removeOfSelectedImages(index);
+      },
+      child: Container(
+        height: 150,
+        width: 150,
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.amber.shade100,
+        ),
+        child: Image.file(
+          cubit.selectedImages[index],
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 }
