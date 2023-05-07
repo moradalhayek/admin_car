@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:admincar/layout/cubit/cubit.dart';
 import 'package:admincar/layout/cubit/states.dart';
 import 'package:admincar/shared/componants/componants.dart';
 import 'package:admincar/shared/styles/icon_brokin.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
 class AddProductScreen extends StatelessWidget {
   AddProductScreen({super.key});
+    
 
   var speedController = TextEditingController();
   var doorController = TextEditingController();
@@ -387,7 +392,10 @@ class AddProductScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         defaultButton(
-                          function: () {},
+                          function: () {
+                         
+                
+                          },
                           text: 'Upload to new',
                           isUpperCase: false,
                           width: 150,
